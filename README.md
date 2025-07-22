@@ -5,7 +5,6 @@ The Radiologist Assistant System is an AI-powered tool designed to assist radiol
 
 ## Features
 - **Brain Tumor Segmentation**: Utilizes U-Net for accurate tumor segmentation in MRI scans.
-- **Stroke Prioritization**: AI-based sorting mechanism to prioritize stroke cases based on severity.
 - **Integration with Radiology Workflow**: Supports DICOM format and PACS integration.
 - **Cloud Storage Support**: Enables remote access to medical reports.
 - **Enhanced Communication System**: Facilitates seamless communication between radiologists and physicians for better diagnosis and treatment coordination.
@@ -14,10 +13,10 @@ The Radiologist Assistant System is an AI-powered tool designed to assist radiol
 - **Programming Language**: Python
 - **Deep Learning Framework**: PyTorch
 - **Image Processing**: OpenCV
-- **Medical Imaging Formats**: DICOM, NIfTI
-- **Frontend**: React (for visualization)
-- **Backend**: FastAPI
-- **Database**: PostgreSQL (for patient history management)
+- **Medical Imaging Formats**: DICOM, NIfTI, TIFF
+- **Frontend**: Streamlit
+- **Backend**: Streamlit
+- **Database**: 
 
 ## Installation
 ```bash
@@ -67,7 +66,7 @@ python train.py --dataset /path/to/dataset --epochs 50 --batch_size 16
 
 ## Contributors
 - Shree Charan
-- Ashwin T
+- Yaazhini
 - Yaazhini A
 
 
