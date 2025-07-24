@@ -24,6 +24,7 @@ from docx.shared import Inches, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from datetime import datetime
 from model import ResUNet50 
+import ollama
 
 st.set_page_config(
     page_title="Brain Tumor Segmentation and Reporting App",
@@ -1314,16 +1315,30 @@ report_type = st.radio(
     ["AI-Generated Report", "Template-Based Report", "Custom Radiology Report"]
 )
 
+import streamlit as st
+import ollama
+
+# Load model once when app starts
+@st.cache_resource(show_spinner="Loading model into memory...")
+def preload_model():
+    try:
+        ollama.chat(model="yi:6b", messages=[{"role": "user", "content": "Hello"}])
+        return True
+    except Exception as e:
+        st.error(f"Error preloading model: {e}")
+        return False
+if "model_ready" not in st.session_state:
+    st.session_state["model_ready"] = preload_model()
+def generate_local_report(prompt, model="yi:6b"):
+    try:
+        response = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}])
+        return response['message']['content']
+    except Exception as e:
+        return f"Error: {e}"
+st.title("🧠 Radiology Report Generator")
+
+
 if st.button("Generate AI Report"):
-    import ollama  # Local model library
-
-    def generate_local_report(prompt, model="llama3.2"):
-        try:
-            response = ollama.chat(model=model, messages=[{"role": "user", "content": prompt}])
-            return response['message']['content']
-        except Exception as e:
-            return f"Error: {e}"
-
     try:
         with st.spinner("Generating AI report..."):
             prompt = f"""
@@ -1362,7 +1377,7 @@ Provide:
 5. Recommendations
 """
 
-            ai_report = generate_local_report(prompt, model="llama3.2")
+            ai_report = generate_local_report(prompt, model="yi:6b")
 
             if ai_report:
                 st.session_state['report_text'] = ai_report
@@ -1373,7 +1388,7 @@ Provide:
     except Exception as e:
         st.error(f"Error generating AI report: {e}")
 
-elif report_type == "Custom Radiology Report":
+elif report_type == st.radio("Select Report Type", ["AI Generated Report", "Custom Radiology Report"]):
     # Additional options for the custom report
     st.subheader("Lesion Classification")
     lesion_classification = st.selectbox(
